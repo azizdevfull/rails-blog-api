@@ -8,4 +8,10 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+Post.all.each do |post|
+  post.images.each do |image|
+    image.purge
+  end
+  post.delete
+end
 Post.delete_all
