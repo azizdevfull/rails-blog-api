@@ -5,13 +5,15 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @posts = Post.all
-
     render json: @posts
   end
-
   # GET /posts/1
   def show
-    render json: @post
+    render json: @post.as_json(include: :images).merge(
+      images: @post.images.map do |image| 
+        url_for(image) 
+      end
+    )
   end
 
   # POST /posts
