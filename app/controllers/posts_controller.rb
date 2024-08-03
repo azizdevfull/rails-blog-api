@@ -4,8 +4,8 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.all
-    render json: @posts, each_serializer: PostSerializer, include_images: false
+    @posts = Post.where(is_published: true)
+    render json: @posts, each_serializer: PostSerializer, include_images: false, include_user: true
   end
 
   def show
@@ -51,6 +51,6 @@ class PostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def post_params
-    params.permit(:title, :body, :preview, images: [])
+    params.permit(:title, :body, :preview, :is_published, images: [])
   end
 end

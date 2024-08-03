@@ -1,7 +1,7 @@
 class PostSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  attributes :id, :title, :body, :created_at, :updated_at, :preview
-
+  attributes :id, :title, :body, :is_published, :created_at, :updated_at, :preview
+  has_one :user, if: -> { instance_options[:include_user] }
   has_many :images, if: -> { instance_options[:include_images] }
 
   def preview
