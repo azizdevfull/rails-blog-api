@@ -5,15 +5,16 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     @posts = Post.all
-    render json: @posts
+    render json: @posts, each_serializer: PostSerializer, include_images: false
   end
-  # GET /posts/1
+
   def show
-    render json: @post.as_json(include: :images).merge(
-      images: @post.images.map do |image| 
-        url_for(image) 
-      end
-    )
+    @post = Post.find_by(id: params[:id])
+    if @post
+      render json: @post, serializer: PostSerializer, include_images: true
+    else
+      render json: { error: "Post not found" }, status: :not_found
+    end
   end
 
   # POST /posts
@@ -50,6 +51,6 @@ class PostsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def post_params
-    params.permit(:title, :body, images: [])
+    params.permit(:title, :body, :preview, images: [])
   end
 end
